@@ -13,7 +13,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie();
 builder.Services.AddAuthorization();
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("localDb"), ServiceLifetime.Singleton);
+builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("userLocalDb"), ServiceLifetime.Singleton);
+
+builder.Services.AddDbContext<AdminDbContext>(options => options.UseInMemoryDatabase("adminLocalDb"), ServiceLifetime.Singleton);
 builder.Services.AddScoped<IBaseService<User>, BaseService<User>>();
 builder.Services.AddScoped<IUserService, UserService>();
 
@@ -32,12 +34,14 @@ var user = new User()
         new Tweet() {Text = "lol Tweet"},
     }
 };
+
 var userSecret = new UserSecrets()
 {
     Username = user.Username,
     Password = "miras123",
     User = user
 };
+
 dbContext.Users.Add(user);
 dbContext.UserSecrets.Add(userSecret);
 dbContext.SaveChanges();
